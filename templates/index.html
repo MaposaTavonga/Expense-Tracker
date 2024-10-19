@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Expense Tracker</h1>
+
+        <!-- Budget Section -->
+        <div class="budget">
+            <h2>Total Budget: {{ currency }}{{ total_budget }}</h2>
+            <h3>Remaining Balance: <span id="remaining-balance">{{ currency }}{{ remaining_balance }}</span></h3>
+        </div>
+
+        <!-- Form to Add Income or Expense -->
+        <form id="transaction-form" action="/add_transaction" method="POST">
+            <input type="text" name="description" placeholder="Description" required>
+            <input type="number" name="amount" placeholder="Amount" required>
+            <input type="text" name="category" placeholder="Category" required>
+            <input type="date" name="date" required>
+
+            <!-- Type Selection -->
+            <select name="transaction_type" required>
+                <option value="expense">Expense</option>
+                <option value="income">Income</option>
+            </select>
+
+            <button type="submit">Add Transaction</button>
+        </form>
+
+        <!-- Currency Selection Form -->
+        <form action="/set_budget" method="POST">
+            <input type="number" name="total_budget" placeholder="Set Total Budget" required>
+            <select name="currency" required>
+                <option value="ZAR">Rands (ZAR)</option>
+                <option value="GBP">Pound (GBP)</option>
+                <option value="USD">Dollar (USD)</option>
+                <option value="ZWD">Zim Dollar (ZWD)</option>
+            </select>
+            <button type="submit">Set Budget</button>
+        </form>
+
+        <!-- Expenses List -->
+        <h2>Transactions</h2>
+        <table id="transactions-table">
+            <thead>
+                <tr>
+                    <th>Description</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for transaction in transactions %}
+                <tr>
+                    <td>{{ transaction[1] }}</td>
+                    <td>{{ currency }}{{ transaction[2] }}</td>
+                    <td>{{ transaction[3] }}</td>
+                    <td>{{ transaction[4] }}</td>
+                    <td>{{ transaction[5] }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
